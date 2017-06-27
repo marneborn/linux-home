@@ -1,0 +1,42 @@
+[user]
+	name = Mikael Arneborn
+	email = mikael@arneborn.net
+
+[alias]
+	ci = commit
+	co = checkout
+	st = status --short
+	br = branch
+	ds = diff --name-status
+	dfw = diff --ignore-space-change
+	dfwtool = difftool --ignore-space-change
+	dftm = difftool -y --diff-filter=M --ignore-space-change
+  lg1 = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
+	lg2 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
+  lg = !"git lg1"
+
+[merge]
+	tool = meld
+	keepBackup = false
+
+[mergetool "meld"]
+  cmd = open -W -a Meld --args --auto-merge \"$PWD/$LOCAL\" \"$PWD/$BASE\" \"$PWD/$REMOTE\" --output=\"$PWD/$MERGED\"
+	keepBackup = false
+	trustExitCode = true
+
+[core]
+	editor = emacs
+	whitespace = trailing-space,space-before-tab,indent-with-non-tab
+	excludesfile = ~/.gitignore
+
+[mergetool]
+	keepBackup = false
+
+[credential]
+
+[diff]
+	tool = meld
+
+[difftool "meld"]
+  cmd = echo \"$LOCAL\" \" \" \"$PWD/$REMOTE\" \" \" \"$PWD/$BASE\"
+# cmd = open -W -a Meld --args \"$LOCAL\" \"$PWD/$REMOTE\"
