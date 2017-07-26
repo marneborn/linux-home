@@ -37,5 +37,5 @@
 	tool = meld
 
 [difftool "meld"]
-  # cmd = echo \"a \" \"$LOCAL\" \" b \" \"$REMOTE\" \" c \" \"$BASE\"
+#   cmd = echo \"a \" \"$LOCAL\" \" b \" \"$REMOTE\" \" c \" \"$BASE\"
   cmd = open -W -a Meld --args \"$LOCAL\" \"$PWD/$REMOTE\"
