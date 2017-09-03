@@ -1,11 +1,19 @@
 
-export PATH=$HOME/bin:$PATH:$HOME:$HOME/Library/Android/sdk/platform-tools
-
+export PATH=$HOME/bin:$PATH:$HOME:$HOME/Library/Android/sdk/platform-tools:$HOME/Library/Android/sdk/tools/bin
 export NODE_ENV=development
 export PG_ROOT=/Users/mikael/DBs/postgres
 export DEBUG=keyo:*
+export ANDROID_HOME=/Users/mikael/Library/Android/sdk
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home
 
-source /usr/local/etc/bash_completion.d/git-completion.bash 
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+  . $(brew --prefix)/etc/bash_completion
+fi
+
+. "$HOME/.sdkman/bin/sdkman-init.sh"
+#[ -f /usr/local/lib/node_modules/yarn-completions/node_modules/tabtab/.completions/yarn.bash ] && . /usr/local/lib/node_modules/yarn-completions/node_modules/tabtab/.completions/yarn.bash
+# . /usr/local/lib/node_modules/yarn-completions/node_modules/tabtab/.completions/yarn.bash
+# . $HOME/bin/npm-completion.bash
 
 parse_git_branch() {
     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'

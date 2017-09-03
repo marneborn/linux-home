@@ -1,1 +1,1 @@
-export DEBUG=apartment-app-service:*
+export DEBUG=keyo:*
