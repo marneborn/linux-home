@@ -1,5 +1,4 @@
-
-export PATH=$HOME/bin:$PATH:$HOME:$HOME/Library/Android/sdk/platform-tools:$HOME/Library/Android/sdk/tools/bin
+export PATH=$PATH:$HOME/bin:$HOME/Library/Android/sdk/platform-tools:$HOME/Library/Android/sdk/tools/bin
 export NODE_ENV=development
 export PG_ROOT=/Users/mikael/DBs/postgres
 export DEBUG=keyo:*
@@ -10,7 +9,10 @@ if [ -f $(brew --prefix)/etc/bash_completion ]; then
   . $(brew --prefix)/etc/bash_completion
 fi
 
-. "$HOME/.sdkman/bin/sdkman-init.sh"
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
+
+#. "$HOME/.sdkman/bin/sdkman-init.sh"
 #[ -f /usr/local/lib/node_modules/yarn-completions/node_modules/tabtab/.completions/yarn.bash ] && . /usr/local/lib/node_modules/yarn-completions/node_modules/tabtab/.completions/yarn.bash
 # . /usr/local/lib/node_modules/yarn-completions/node_modules/tabtab/.completions/yarn.bash
 # . $HOME/bin/npm-completion.bash
@@ -31,6 +33,7 @@ PROMPT_COMMAND=set_bash_prompt
 
 alias ll="ls -ltr"
 alias ngrep="grep -r --exclude-dir node_modules --exclude-dir .git --exclude-dir RCTImage.build"
+alias em-nexus5="cd $ANDROID_HOME/tools && ./emulator -avd Nexus_5_API_26"
 
 pretty-curl() {
   curl $@ | python -mjson.tool
