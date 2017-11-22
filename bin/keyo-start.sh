@@ -13,29 +13,29 @@ tell application "Terminal"
     end tell
 
     -- Start postgres
-    set firstCommand to "postgres -D $PG_ROOT/data | tee $PG_ROOT/logfile"
+    set firstCommand to "ttab \"postgres -D $PG_ROOT/data | tee $PG_ROOT/logfile\""
     do script firstCommand in targetWindow
 
     delay 1
 
     -- Start the aparment-app-service
-    tell application "System Events" to tell process "Terminal" to keystroke "t" using command down
-    set secondCommand to "cd $KEYO_ROOT/apartment-app-service; yarn watch"
-    do script secondCommand in targetWindow
+    --tell application "System Events" to tell process "Terminal" to keystroke "t" using command down
+    set secondCommand to "ttab \"cd $KEYO_ROOT/apartment-app-service; yarn watch\""
+    do script secondCommand in tab 1 of targetWindow
 
-    delay 1
+    delay 10
 
     -- Start the admin-portal
-    tell application "System Events" to tell process "Terminal" to keystroke "t" using command down
-    set secondCommand to "cd $KEYO_ROOT/keyo-web; yarn start"
-    do script secondCommand in targetWindow
+    --tell application "System Events" to tell process "Terminal" to keystroke "t" using command down
+    set thirdCommand to "ttab \"cd $KEYO_ROOT/keyo-web; yarn start\""
+    do script thirdCommand in tab 1 of targetWindow
 
     -- postgres takes a while...
     delay 5
     -- Interactive postgres
-    tell application "System Events" to tell process "Terminal" to keystroke "t" using command down
-    set secondCommand to "psql -d keyodb"
-    do script secondCommand in targetWindow
+    --tell application "System Events" to tell process "Terminal" to keystroke "t" using command down
+    set fourthCommand to "ttab psql -d keyodb"
+    do script fourthCommand in tab 1 of targetWindow
 
 end tell
 
