@@ -34,6 +34,7 @@ PROMPT_COMMAND=set_bash_prompt
 alias ll="ls -ltr"
 alias ngrep="grep -r --exclude-dir node_modules --exclude-dir .git --exclude-dir RCTImage.build"
 alias em-nexus5="cd $ANDROID_HOME/tools && ./emulator -avd Nexus_5_API_26"
+alias show-cursor="tput cvvis"
 
 pretty-curl() {
   curl $@ | python -mjson.tool
