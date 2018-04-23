@@ -1,5 +1,7 @@
 . ~/bin/keyo-setup.sh
 
+# If ttab breaks make sure it's installed `npm install -g ttab`
+
 osascript <<EOF
 tell application "Terminal"
     -- Activate it.
