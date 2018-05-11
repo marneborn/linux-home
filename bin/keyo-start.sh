@@ -11,7 +11,9 @@ tell application "Terminal"
     set targetWindow to window 1
 
     tell selected tab of targetWindow
-    set background color to {13364,43176,21331}
+    set background color to {254*257,241*257,146*257}
+    set normal text color to {0*257,0*257,0*257}
+    set bold text color to {0*257,0*257,0*257}
     end tell
 
     -- Start postgres
