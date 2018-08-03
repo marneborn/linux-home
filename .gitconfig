@@ -41,3 +41,5 @@
 [difftool "meld"]
   # cmd = echo \"a \" \"$LOCAL\" \" b \" \"$REMOTE\" \" c \" \"$BASE\"
   cmd = open -W -a Meld --args \"$LOCAL\" \"$PWD/$REMOTE\"
+[hub]
+	host = https://github.com/keyoai
