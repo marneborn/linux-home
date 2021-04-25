@@ -23,7 +23,7 @@ ln -fs ~/home-git/.zshrc ~/.
 ln -fs ~/home-git/.aliases ~/.
 ln -fs ~/home-git/.gitconfig ~/.
 ln -fs ~/home-git/.gitignore.global ~/.gitignore
-ln -fs ~/home-git/dotemacs ~/.emacs.d
+rm -rf ~/.emacs.d ln -fs ~/home-git/dotemacs ~/.emacs.d
 ln -fs ~/home-git/ssh-config ~/.ssh/config
 
 cd ~/.ssh
