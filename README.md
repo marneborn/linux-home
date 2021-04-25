@@ -26,8 +26,8 @@ ln -fs ~/home-git/.emacs.d ~/.
 
 Install and set version to 8.11.3
 ```
-sudo npm install -g n
-sudo n 8.11.3
+curl -L https://raw.githubusercontent.com/tj/n/master/bin/n -o n
+bash n lts
 ```
 ## Install [yarn](https://yarnpkg.com/lang/en/docs/install/#mac-stable)
 ```
