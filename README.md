@@ -1,5 +1,17 @@
-## Install [xcode](https://developer.apple.com/xcode/)
-## Install [Android Studio](https://developer.android.com/studio/)
+## Install [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+### On MA
+git --version
+xcode-select --install
+
+
+## Setup SSH:
+Get a [ssh key for github](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/)
+```
+cd ~/.ssh
+git init
+git add .
+git commit -m "created"
+```
 
 ## Setup environment
 ```
@@ -11,7 +23,13 @@ ln -fs ~/home-git/.zshrc ~/.
 ln -fs ~/home-git/.aliases ~/.
 ln -fs ~/home-git/.gitconfig ~/.
 ln -fs ~/home-git/.gitignore.global ~/.gitignore
-ln -fs ~/home-git/.emacs.d ~/.
+ln -fs ~/home-git/dotemacs ~/.emacs.d
+ln -fs ~/home-git/ssh-config ~/.ssh/config
+
+cd ~/.ssh
+git init
+git add .
+git ci -m created
 ```
 
 ## Install [brew](https://brew.sh/)
@@ -19,44 +37,19 @@ ln -fs ~/home-git/.emacs.d ~/.
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
 
-## Install [nodejs](https://nodejs.org/en/download/)
-
-## Install [n](https://www.npmjs.com/package/n)
-##### This allows us to easily change the version of node we are running.
-
-Install and set version to 8.11.3
+## Install node (uses [n](https://www.npmjs.com/package/n)
 ```
-curl -L https://raw.githubusercontent.com/tj/n/master/bin/n -o n
-bash n lts
-```
-## Install [yarn](https://yarnpkg.com/lang/en/docs/install/#mac-stable)
-```
-brew install yarn
+n lts
+npm install --global yarn
 ```
 
 ## Install some common CLIs
 ```
-yarn global add mocha-cli
-yarn global add eslint
-yarn global add ttab
-yarn global add nodemon
+yarn global add mocha-cli eslint-cli ttab uuid moment-timezone
 ```
 
 ## Install [emacs](https://emacsformacosx.com/), if you like.
 
-## Install [meld](https://github.com/yousseb/meld/releases/) a good diff tool.
+## Install [meld](https://yousseb.github.io/meld/) a good diff tool.
 
-## Install [bash completion](), mostly for git-completion
-```
-brew install bash-completion
-```
-
-## Setup SSH:
-Get a [ssh key for github](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/)
-```
-cd ~/.ssh
-git init
-git add .
-git commit -m "created"
-```
 
