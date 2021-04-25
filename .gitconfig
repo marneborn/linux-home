@@ -1,6 +1,6 @@
 [user]
 	name = Mikael Arneborn
-	email = mikael@arneborn.net
+	email = marneborn@gmail.com
 
 [alias]
 	ci = commit
@@ -29,7 +29,7 @@
 [core]
 	editor = /Applications/Emacs.app/Contents/MacOS/Emacs
 	whitespace = trailing-space,space-before-tab,indent-with-non-tab
-	excludesFile = /Users/mikaela/.gitignore.global
+	excludesFile = /Users/mikaela/.gitignore
 	pager = 
 
 [mergetool]	keepBackup = false
@@ -43,6 +43,6 @@
   cmd = /Applications/Meld.app/Contents/MacOS/Meld \"$LOCAL\" \"$REMOTE\"
 
 [hub]
-	host = https://github.com/keyoai
+	host = https://github.com/marneborn
 
 
