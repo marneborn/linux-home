@@ -18,6 +18,10 @@ git commit -m "created"
 cd ~
 git clone -b mac-zsh --recurse-submodules git@github.com:marneborn/linux-home.git home-git
 
+cd ~/home-git
+git submodule update --init --recursive
+cd ~
+
 ln -fs ~/home-git/bin ~/.
 ln -fs ~/home-git/.zshrc ~/.
 ln -fs ~/home-git/.aliases ~/.
