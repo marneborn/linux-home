@@ -1,17 +1,18 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-
-# Path to your oh-my-zsh installation.
-export ZSH="/Users/mikael/home-git/ohmyzsh"
-
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+export ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="robbyrussell"
-
 plugins=(git)
-
 source $ZSH/oh-my-zsh.sh
 
+export PATH=$HOME/bin:$PATH
 
+if [ -e $HOME/.secrets ]; then
+  . $HOME/.secrets
+fi
+
+if [ -e $HOME/.aliases ]; then
+  . $HOME/.aliases
+fi
+
+pretty-curl() {
+  curl $@ | python -mjson.tool
+}
