@@ -7,9 +7,10 @@ cd ~
 git clone -b mac-zsh --recurse-submodules git@github.com:marneborn/linux-home.git home-git
 
 ln -fs ~/home-git/bin ~/.
-ln -fs ~/home-git/.zsh ~/.
+ln -fs ~/home-git/.zshrc ~/.
+ln -fs ~/home-git/.aliases ~/.
 ln -fs ~/home-git/.gitconfig ~/.
-ln -fs ~/home-git/.gitignore ~/.
+ln -fs ~/home-git/.gitignore.global ~/.gitignore
 ln -fs ~/home-git/.emacs.d ~/.
 ```
 

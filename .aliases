@@ -1,0 +1,13 @@
+alias ll="ls -ltr"
+alias ngrep="grep -r --exclude-dir node_modules --exclude-dir .git --exclude-dir RCTImage.build"
+alias show-cursor="tput cvvis"
+alias uuid="node -e \"console.log(require('uuid/v4')())\" | tr -d '\n' | pbcopy"
+alias toltime="node -e 'let v = /^\d+$/.test(process.argv[1]) ? parseInt(process.argv[1], 10) : process.argv.slice(1).join(\" \"); console.log(require(\"moment-timezone\")(v).format())'"
+alias srv_process="lsof -nP -i4TCP:9000 | grep LISTEN"
+alias em-pixel2='$(cd $ANDROID_HOME/emulator && ./emulator -avd Pixel_2_API_28) &'
+alias em-pixel3='$(cd $ANDROID_HOME/emulator && ./emulator -avd Pixel-3a-API-28) &'
+alias meld="/Applications/Meld.app/Contents/MacOS/Meld"
+alias pruneBranches="git fetch origin --prune 2>&1 | grep '[deleted]' | grep -e '\[deleted\]' | perl -p -e 's/.* origin\///' | xargs git branch -D"
+alias getIP="ifconfig | grep 'inet ' | grep -Fv 127.0.0.1 | awk '{print $2}'"
+alias getLogs="scp keyo-prod1:/build/apartment-app-service/logs/apartment-app-service.log prod1.log ; scp keyo-prod2:/build/apartment-app-service/logs/apartment-app-service.log prod2.log"
+alias aws2=/usr/local/bin/aws
