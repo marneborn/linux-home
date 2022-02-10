@@ -42,7 +42,7 @@
 
 [difftool "meld"]
   trustExitCode = true
-  cmd = open -W -a /Applications/Meld.app/Contents/MacOS/Meld \"$LOCAL\" \"$REMOTE\"
+  cmd = /Applications/Meld.app/Contents/MacOS/Meld \"$LOCAL\" \"$REMOTE\"
 
 [hub]
 	host = https://github.com/marneborn
