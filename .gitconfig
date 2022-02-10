@@ -22,8 +22,8 @@
 	keepBackup = false
 
 [mergetool "meld"]
-  cmd = open -W -a /Applications/Meld.app/Contents/MacOS/Meld \"$LOCAL\" \"$BASE\" \"$REMOTE\" --output=\"$MERGED\"
-  # cmd = open -W -a Meld --args --auto-merge \"$LOCAL\" \"$BASE\" \"$REMOTE\" --output=\"$MERGED\"
+  # cmd = /Applications/Meld.app/Contents/MacOS/Meld "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED"
+  cmd = /Applications/Meld.app/Contents/MacOS/Meld "$LOCAL" "$MERGED" "$REMOTE" --output "$MERGED"
 	keepBackup = false
 	trustExitCode = true
 
@@ -48,3 +48,7 @@
 	host = https://github.com/marneborn
 
 
+[pull]
+	ff = only
+[init]
+	defaultBranch = main
