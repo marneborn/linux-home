@@ -4,8 +4,11 @@ ZSH_THEME="robbyrussell"
 plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
+export AWS_PAGER=
+
 export PATH=$HOME/bin:/usr/local/sbin:$PATH
 export N_PREFIX=$HOME/.n
+export NODE_ENV=development
 
 if [ -e $HOME/.secrets ]; then
   . $HOME/.secrets
