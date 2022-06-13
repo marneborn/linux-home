@@ -23,7 +23,7 @@
 
 [mergetool "meld"]
   # cmd = /Applications/Meld.app/Contents/MacOS/Meld "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED"
-  cmd = /Applications/Meld.app/Contents/MacOS/Meld "$LOCAL" "$MERGED" "$REMOTE" --output "$MERGED"
+  cmd = /Applications/Meld.app/Contents/MacOS/Meld "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED"
 	keepBackup = false
 	trustExitCode = true
 
