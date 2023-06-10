@@ -9,4 +9,6 @@ alias em-pixel3='$(cd $ANDROID_HOME/emulator && ./emulator -avd Pixel-3a-API-28)
 alias meld="/Applications/Meld.app/Contents/MacOS/Meld"
 alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs"
 alias pruneBranches="git fetch origin --prune 2>&1 | grep '[deleted]' | grep -e '\[deleted\]' | perl -p -e 's/.* origin\///' | xargs git branch -D"
+alias pruneVSCodeTSLogs="rm -rf ~/Library/Application Support/Code/logs"
 alias getIP="ifconfig | grep 'inet ' | grep -Fv 127.0.0.1 | awk '{print $2}'"
+alias sortjson="jq --sort-keys"

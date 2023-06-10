@@ -6,9 +6,12 @@ source $ZSH/oh-my-zsh.sh
 
 export AWS_PAGER=
 
+PATH="/usr/local/opt/libpq/bin:$PATH"
 export PATH=$HOME/bin:/usr/local/sbin:$PATH
+
 export N_PREFIX=$HOME/.n
 export NODE_ENV=development
+export ANDROID_HOME=/Users/mikael/Library/Android/sdk
 
 if [ -e $HOME/.secrets ]; then
   . $HOME/.secrets
@@ -19,7 +22,7 @@ if [ -e $HOME/.aliases ]; then
 fi
 
 pretty-curl() {
-  curl $@ | python -mjson.tool
+  curl $@ | python3 -mjson.tool
 }
 
 export NVM_DIR="$HOME/.nvm"

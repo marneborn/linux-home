@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+P=$1
+
+if [ -z "$P" ]; then
+ exit 1
+fi
+
+TMP="/tmp/$$"
+mv $1 $TMP
+rm -rf $TMP &
