@@ -6,6 +6,9 @@ source $ZSH/oh-my-zsh.sh
 
 export AWS_PAGER=
 
+export M2_HOME="$HOME/bin/apache-maven-3.9.5"
+PATH="${M2_HOME}/bin:${PATH}"
+
 PATH="/usr/local/opt/libpq/bin:$PATH"
 export PATH=$HOME/bin:/usr/local/sbin:$PATH
 
