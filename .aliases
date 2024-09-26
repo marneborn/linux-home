@@ -3,7 +3,7 @@ alias ngrep="grep -r --exclude-dir node_modules --exclude-dir .git --exclude-dir
 alias show-cursor="tput cvvis"
 alias uuid="uuid | pbcopy"
 alias toltime="node -e 'let v = /^\d+$/.test(process.argv[1]) ? parseInt(process.argv[1], 10) : process.argv.slice(1).join(\" \"); console.log(require(\`\${process.env.HOME}/.config/yarn/global/node_modules/moment-timezone\`)(v).format())'"
-alias srv_process="lsof -nP -i4TCP:9000 | grep LISTEN"
+alias srv_process="lsof -nP -i4TCP:3100 | grep LISTEN"
 alias em-pixel2='$(cd $ANDROID_HOME/emulator && ./emulator -avd Pixel_2_API_28) &'
 alias em-pixel3='$(cd $ANDROID_HOME/emulator && ./emulator -avd Pixel-3a-API-28) &'
 alias meld="/Applications/Meld.app/Contents/MacOS/Meld"
