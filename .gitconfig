@@ -17,32 +17,49 @@
   show-branches = "for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'"
   orphank = !gitk --all --date-order ``git reflog | cut -c1-7``
 
-[merge]
-	tool = meld
-	keepBackup = false
-
-[mergetool "meld"]
-  # cmd = /Applications/Meld.app/Contents/MacOS/Meld "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED"
-  cmd = /Applications/Meld.app/Contents/MacOS/Meld "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED"
-	keepBackup = false
-	trustExitCode = true
-
 [core]
 	editor = /Applications/Emacs.app/Contents/MacOS/Emacs
 	whitespace = trailing-space,space-before-tab,indent-with-non-tab
 	excludesFile = /Users/mikael/.gitignore
 	pager =
 
-[mergetool]	keepBackup = false
-
 [credential]
 
 [diff]
 	tool = meld
 
+[difftool]
+	tool = meld
+
+[mergetool]
+  tool = meld
+  keepBackup = false
+
+[merge]
+	tool = meld
+	keepBackup = false
+
+[mergetool "meld"]
+  cmd = /Applications/Meld.app/Contents/MacOS/Meld "$LOCAL" "$BASE" "$REMOTE" --output "$MERGED"
+	keepBackup = false
+	trustExitCode = true
+
+[mergetool "opendiff"]
+  cmd = opendiff "$LOCAL" "$REMOTE" -ancestor "$REMOTE" -merge $MERGED
+	keepBackup = false
+	trustExitCode = true
+
 [difftool "meld"]
   trustExitCode = true
   cmd = /Applications/Meld.app/Contents/MacOS/Meld \"$LOCAL\" \"$REMOTE\"
+
+[difftool "p4merge"]
+  trustExitCode = true
+  cmd = /Applications/p4merge.app/Contents/Resources/launchp4merge \"$LOCAL\" \"$REMOTE\"
+
+[difftool "opendiff"]
+  trustExitCode = true
+  cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 
 [hub]
 	host = https://github.com/marneborn

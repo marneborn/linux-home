@@ -10,6 +10,7 @@ export M2_HOME="$HOME/bin/apache-maven-3.9.5"
 
 PATH="${M2_HOME}/bin:${PATH}"
 PATH="/usr/local/opt/libpq/bin:$PATH"
+PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 PATH="/usr/local/sbin:$PATH"
 PATH="/Applications/Docker.app/Contents/Resources/bin:$PATH"
 PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PATH"
