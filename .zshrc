@@ -9,6 +9,8 @@ export AWS_PAGER=
 export M2_HOME="$HOME/bin/apache-maven-3.9.5"
 
 PATH="${M2_HOME}/bin:${PATH}"
+PATH="${HOME}/bin:${PATH}"
+PATH="${HOME}/.config/yarn/global/node_modules/.bin:${PATH}"
 PATH="/usr/local/opt/libpq/bin:$PATH"
 PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 PATH="/usr/local/sbin:$PATH"
