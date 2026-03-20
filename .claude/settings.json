@@ -1,7 +1,16 @@
 {
   "permissions": {
     "allow": [
-      "mcp__plugin_glade_linear-glade__get_issue"
+      "mcp__plugin_glade_linear-glade__get_*",
+      "mcp__plugin_glade_linear-glade__list_*",
+      "mcp__plugin_glade_linear-glade__search_*",
+      "mcp__plugin_glade_sentry-glade__get_*",
+      "mcp__plugin_glade_sentry-glade__list_*",
+      "mcp__plugin_glade_notion-glade__get_*",
+      "mcp__plugin_glade_notion-glade__list_*",
+      "mcp__plugin_glade_notion-glade__search_*",
+      "mcp__plugin_glade_plain-glade__get_*",
+      "mcp__plugin_glade_plain-glade__list_*"
     ]
   },
   "enabledPlugins": {
