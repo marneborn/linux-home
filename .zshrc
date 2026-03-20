@@ -20,10 +20,6 @@ PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PATH"
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 ZSH_DISABLE_COMPFIX=true
 ZSH_THEME="robbyrussell"
 plugins=(git direnv)
@@ -63,3 +59,9 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # proto
 export PROTO_HOME="$HOME/.proto";
 export PATH="$PROTO_HOME/shims:$PROTO_HOME/bin:$PATH";
+
+# nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
