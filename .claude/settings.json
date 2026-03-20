@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__plugin_glade_linear-glade__get_issue"
+    ]
+  },
+  "enabledPlugins": {
+    "glade@glade-ai": true
+  },
+  "extraKnownMarketplaces": {
+    "karve-vc": {
+      "source": {
+        "source": "github",
+        "repo": "karve-vc/glade-claude-plugin"
+      }
+    },
+    "glade-ai": {
+      "source": {
+        "source": "github",
+        "repo": "glade-ai/glade-claude-plugin"
+      }
+    }
+  }
+}
