@@ -3,26 +3,37 @@
     "allow": [
       "mcp__plugin_glade_linear-glade__get_*",
       "mcp__plugin_glade_linear-glade__list_*",
+      "mcp__plugin_glade_linear-glade__save_issue",
       "mcp__plugin_glade_linear-glade__search_*",
-      "mcp__plugin_glade_sentry-glade__get_*",
-      "mcp__plugin_glade_sentry-glade__list_*",
       "mcp__plugin_glade_notion-glade__get_*",
       "mcp__plugin_glade_notion-glade__list_*",
       "mcp__plugin_glade_notion-glade__search_*",
       "mcp__plugin_glade_plain-glade__get_*",
-      "mcp__plugin_glade_plain-glade__list_*"
+      "mcp__plugin_glade_plain-glade__list_*",
+      "mcp__plugin_glade_sentry-glade__get_*",
+      "mcp__plugin_glade_sentry-glade__list_*",
+      "Read($HOME/dev/glade/**)",
+      "Bash(bun *)",
+      "Bash(find src:*)",
+      "Bash(gh *)",
+      "Bash(git *)",
+      "Bash(grep *)",
+      "Bash(nvm use:*)",
+      "Bash(yarn build:*)",
+      "Bash(yarn install:*)",
+      "Bash(yarn lint:js:*)",
+      "Bash(yarn pg:test:migration:run)",
+      "Bash(yarn tsx:*)"
+    ],
+    "defaultMode": "acceptEdits",
+    "additionalDirectories": [
+      "~/dev/glade"
     ]
   },
   "enabledPlugins": {
     "glade@glade-ai": true
   },
   "extraKnownMarketplaces": {
-    "karve-vc": {
-      "source": {
-        "source": "github",
-        "repo": "karve-vc/glade-claude-plugin"
-      }
-    },
     "glade-ai": {
       "source": {
         "source": "github",
