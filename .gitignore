@@ -2,5 +2,6 @@
 bin/ngrok
 bin/shellcheck-stable
 bin/apache-maven-3.9.5
+bin/google-cloud-sdk
 
 .claude/settings.local.json

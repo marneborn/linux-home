@@ -40,5 +40,6 @@
         "repo": "glade-ai/glade-claude-plugin"
       }
     }
-  }
+  },
+  "skipAutoPermissionPrompt": true
 }
