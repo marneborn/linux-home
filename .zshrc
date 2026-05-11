@@ -25,6 +25,9 @@ ZSH_THEME="robbyrussell"
 plugins=(git direnv)
 source $ZSH/oh-my-zsh.sh
 
+DISABLE_AUTO_TITLE="true"
+retitle() { echo -ne "\e]0;$1\a" }
+
 export AWS_PAGER=
 
 export M2_HOME="$HOME/bin/apache-maven-3.9.5"
