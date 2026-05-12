@@ -5,3 +5,5 @@ bin/apache-maven-3.9.5
 bin/google-cloud-sdk
 
 .claude/settings.local.json
+.aws/*
+!.aws/config
