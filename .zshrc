@@ -26,7 +26,10 @@ plugins=(git direnv)
 source $ZSH/oh-my-zsh.sh
 
 DISABLE_AUTO_TITLE="true"
-retitle() { echo -ne "\e]0;$1\a" }
+retitle() {
+  echo -ne "\e]1;$1\a"
+  echo -ne "\e]2;$2\a"
+}
 
 export AWS_PAGER=
 
