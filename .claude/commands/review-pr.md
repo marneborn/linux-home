@@ -45,6 +45,10 @@ Go through the diff and evaluate the following dimensions:
 - Is there duplicated logic that could be consolidated?
 - Are variable and function names clear?
 
+### TypeScript Safety
+- Flag every use of `any` type — these are always worth calling out, as they punch holes in type safety
+- Flag uses of `as` type assertions (` as SomeType`) — these override the compiler and can hide real type errors; check if the assertion is actually necessary or if the code can be typed properly instead
+
 ### Security
 - Are there any injection risks (SQL, command, XSS)?
 - Is user input validated at system boundaries?
