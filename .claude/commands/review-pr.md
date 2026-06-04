@@ -62,7 +62,7 @@ Go through the diff and evaluate the following dimensions:
 
 Structure your review as:
 
-**Summary** — 2-3 sentences describing what the PR does and your overall impression.
+**Summary** — open with one genuine positive about the PR (approach, design, code quality, or test coverage), then 1-2 sentences on overall impression.
 
 **Feedback** — a bulleted list of findings. For each item include:
 - Severity: `[critical]`, `[major]`, `[minor]`, or `[nit]`
