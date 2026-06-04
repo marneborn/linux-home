@@ -17,6 +17,7 @@ PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
 PATH="/usr/local/sbin:$PATH"
 PATH="/Applications/Docker.app/Contents/Resources/bin:$PATH"
 PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PATH"
+PATH="$HOME/.local/bin:$PATH"
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
@@ -49,11 +50,9 @@ fi
 pretty-curl() { curl $@ | python3 -mjson.tool ;}
 
 cp-qa-s3-pdf() { aws s3 cp s3://noodle-documents-qa/$1 ~/Desktop/$1.pdf }
-export PATH="$HOME/.local/bin:$PATH"
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /opt/homebrew/bin/terraform terraform
-
 
 # bun completions
 [ -s "/Users/mikael/.bun/_bun" ] && source "/Users/mikael/.bun/_bun"
