@@ -28,10 +28,14 @@ source $ZSH/oh-my-zsh.sh
 
 DISABLE_AUTO_TITLE="true"
 retitle() {
-  echo -ne "\e]1;$1\a"
-  echo -ne "\e]2;$2\a"
+  if [[ -n "$2" ]]; then
+    echo -ne "\e]2;$1/$2\a"
+    echo -ne "\e]1;$2\a"
+  else
+    echo -ne "\e]2;$1\a"
+    echo -ne "\e]1;$1\a"
+  fi
 }
-
 export AWS_PAGER=
 
 export M2_HOME="$HOME/bin/apache-maven-3.9.5"
