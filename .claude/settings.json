@@ -41,6 +41,6 @@
       }
     }
   },
-  "skipAutoPermissionPrompt": true,
-  "remoteControlAtStartup": false
+  "remoteControlAtStartup": false,
+  "skipAutoPermissionPrompt": true
 }
