@@ -1,0 +1,121 @@
+#!/usr/bin/env bash
+# setup-worktree — create & bootstrap a single git worktree for one repo
+# Usage: setup-worktree <repo> <branch> [dest]
+#   <repo>   repo name (resolved under ~/dev/glade/core then ~/dev/glade/utility) or a path
+#   <branch> branch name for the worktree
+#   [dest]   worktree path (default: $PWD/<repo-basename>)
+#
+# The repo's own scripts/setupDevEnvironment.sh handles all per-repo quirks
+# (yarn/uv install, build:devdotenv, .env symlink, build:graphqltypes). We run
+# it through `direnv exec` so it gets the right node version from .envrc.
+set -euo pipefail
+
+CORE="$HOME/dev/glade/core"
+UTILITY="$HOME/dev/glade/utility"
+AWS_PROFILE_NAME="staging-admin"
+
+# ── colours ──────────────────────────────────────────────────────────────────
+bold=$(tput bold 2>/dev/null || echo "")
+reset=$(tput sgr0 2>/dev/null || echo "")
+green=$(tput setaf 2 2>/dev/null || echo "")
+yellow=$(tput setaf 3 2>/dev/null || echo "")
+cyan=$(tput setaf 6 2>/dev/null || echo "")
+red=$(tput setaf 1 2>/dev/null || echo "")
+
+die() { echo "${red}error:${reset} $*" >&2; exit 1; }
+
+# ── args ─────────────────────────────────────────────────────────────────────
+REPO_ARG="${1:-}"
+BRANCH="${2:-}"
+DEST_ARG="${3:-}"
+[[ -z "$REPO_ARG" || -z "$BRANCH" ]] && die "usage: setup-worktree <repo> <branch> [dest]"
+
+# ── aws preflight ────────────────────────────────────────────────────────────
+# setupDevEnvironment.sh needs valid AWS creds; bail early with a clear hint.
+echo "${cyan}Checking AWS profile '$AWS_PROFILE_NAME'…${reset}"
+if ! aws sts get-caller-identity --profile "$AWS_PROFILE_NAME" >/dev/null 2>&1; then
+  die "not logged in to AWS profile '$AWS_PROFILE_NAME'. Run: ${bold}aws sso login --profile $AWS_PROFILE_NAME${reset}"
+fi
+# setupDevEnvironment.sh runs with this profile.
+export AWS_PROFILE="$AWS_PROFILE_NAME"
+
+# ── resolve repo path ────────────────────────────────────────────────────────
+if [[ -d "$REPO_ARG/.git" || -f "$REPO_ARG/.git" ]]; then
+  REPO_PATH="$REPO_ARG"
+elif [[ -d "$CORE/$REPO_ARG" ]]; then
+  REPO_PATH="$CORE/$REPO_ARG"
+elif [[ -d "$UTILITY/$REPO_ARG" ]]; then
+  REPO_PATH="$UTILITY/$REPO_ARG"
+else
+  die "repo '$REPO_ARG' not found under $CORE or $UTILITY (and not a git path)"
+fi
+REPO_PATH="${REPO_PATH%/}"
+REPO_NAME="$(basename "$REPO_PATH")"
+
+# ── resolve dest ─────────────────────────────────────────────────────────────
+DEST="${DEST_ARG:-$PWD/$REPO_NAME}"
+DEST="${DEST%/}"
+
+echo "  repo:   ${bold}$REPO_NAME${reset}  ($REPO_PATH)"
+echo "  branch: ${cyan}$BRANCH${reset}"
+echo "  dest:   $DEST"
+
+# ── skip if the worktree already exists ──────────────────────────────────────
+if [[ -e "$DEST" ]]; then
+  echo "${yellow}skipped — $DEST already exists${reset}"
+  exit 0
+fi
+
+# ── create the worktree ──────────────────────────────────────────────────────
+git -C "$REPO_PATH" fetch origin --quiet 2>/dev/null || true
+
+remote_exists=$(git -C "$REPO_PATH" show-ref --verify --quiet "refs/remotes/origin/$BRANCH" && echo yes || echo no)
+local_exists=$(git -C "$REPO_PATH" show-ref --verify --quiet "refs/heads/$BRANCH" && echo yes || echo no)
+
+mkdir -p "$(dirname "$DEST")"
+
+if [[ "$local_exists" == "yes" ]]; then
+  git -C "$REPO_PATH" worktree add "$DEST" "$BRANCH" \
+    || die "worktree add failed (existing local branch $BRANCH)"
+  echo "${green}worktree created (existing local branch)${reset}"
+elif [[ "$remote_exists" == "yes" ]]; then
+  git -C "$REPO_PATH" worktree add --track -b "$BRANCH" "$DEST" "origin/$BRANCH" \
+    || die "worktree add failed (tracking origin/$BRANCH)"
+  echo "${green}worktree created (tracking origin/$BRANCH)${reset}"
+else
+  git -C "$REPO_PATH" worktree add -b "$BRANCH" "$DEST" "origin/main" \
+    || die "worktree add failed (new branch from origin/main)"
+  echo "${green}worktree created (new branch from origin/main)${reset}"
+fi
+
+# ── direnv ───────────────────────────────────────────────────────────────────
+if [[ -f "$DEST/.envrc" ]]; then
+  direnv allow "$DEST" || die "direnv allow failed"
+fi
+
+# ── run the repo's dev-env bootstrap (via direnv exec → correct node) ─────────
+# AWS_PROFILE is already exported above. A few repos need special handling.
+cd "$DEST"
+SETUP="scripts/setupDevEnvironment.sh"
+
+case "$REPO_NAME" in
+  noodle-frontend)
+    echo "${cyan}Running setupDevEnvironment.sh --local…${reset}"
+    direnv exec "$DEST" bash "$SETUP" --local || die "setupDevEnvironment.sh --local failed"
+    echo "${green}${bold}Done.${reset} $DEST ready."
+    ;;
+  glade)
+    echo "${cyan}Running yarn…${reset}"
+    direnv exec "$DEST" yarn || die "yarn failed"
+    echo "${green}${bold}Done.${reset} $DEST ready."
+    ;;
+  *)
+    if [[ -f "$SETUP" ]]; then
+      echo "${cyan}Running setupDevEnvironment.sh…${reset}"
+      direnv exec "$DEST" bash "$SETUP" || die "setupDevEnvironment.sh failed"
+      echo "${green}${bold}Done.${reset} $DEST ready."
+    else
+      echo "${yellow}No setupDevEnvironment.sh — worktree created, nothing to bootstrap.${reset}"
+    fi
+    ;;
+esac

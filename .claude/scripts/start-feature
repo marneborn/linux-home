@@ -1,13 +1,21 @@
 #!/usr/bin/env bash
-# start-feature — create per-feature worktrees for a Linear ticket
-# Usage: start-feature [TICKET-ID]
+# start-feature — create & bootstrap per-feature worktrees across repos
+# Usage: start-feature <subdir> <branch> <repo> [repo ...]
+#   <subdir>  directory under ~/dev/glade/per-feature/ to hold the worktrees
+#   <branch>  branch name for every worktree
+#   <repo...> one or more repo names (resolved under core/ then utility/) or paths
+#
+# Thin front-end over setup-worktree: makes the per-feature dir, then fans one
+# setup-worktree per repo out in parallel (each hits a different source repo, so
+# no contention) and prints a pass/fail summary.
 set -euo pipefail
 
-# ── constants ────────────────────────────────────────────────────────────────
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+SETUP_WORKTREE="$SCRIPT_DIR/setup-worktree"
 PER_FEATURE="$HOME/dev/glade/per-feature"
 CORE="$HOME/dev/glade/core"
 UTILITY="$HOME/dev/glade/utility"
-TOKEN_FILE="$HOME/.config/glade/linear_token"
+AWS_PROFILE_NAME="staging-admin"
 
 # ── colours ──────────────────────────────────────────────────────────────────
 bold=$(tput bold 2>/dev/null || echo "")
@@ -19,193 +27,65 @@ red=$(tput setaf 1 2>/dev/null || echo "")
 
 die() { echo "${red}error:${reset} $*" >&2; exit 1; }
 
-# ── linear api key ───────────────────────────────────────────────────────────
-LINEAR_API_KEY="${LINEAR_API_KEY:-}"
-if [[ -z "$LINEAR_API_KEY" && -f "$TOKEN_FILE" ]]; then
-  LINEAR_API_KEY=$(cat "$TOKEN_FILE")
-fi
-if [[ -z "$LINEAR_API_KEY" ]]; then
-  echo "${yellow}No LINEAR_API_KEY found in environment or $TOKEN_FILE${reset}"
-  echo "Create a Personal API key at: https://linear.app/settings/api"
-  echo -n "Paste your Linear API key: "
-  read -r LINEAR_API_KEY
-  [[ -z "$LINEAR_API_KEY" ]] && die "API key required"
-  mkdir -p "$(dirname "$TOKEN_FILE")"
-  echo "$LINEAR_API_KEY" > "$TOKEN_FILE"
-  chmod 600 "$TOKEN_FILE"
-  echo "${green}Saved to $TOKEN_FILE${reset}"
-fi
+# ── args ─────────────────────────────────────────────────────────────────────
+SUBDIR="${1:-}"
+BRANCH="${2:-}"
+[[ -z "$SUBDIR" || -z "$BRANCH" || $# -lt 3 ]] \
+  && die "usage: start-feature <subdir> <branch> <repo> [repo ...]"
+shift 2
+REPOS=("$@")
 
-# ── ticket id ────────────────────────────────────────────────────────────────
-TICKET="${1:-}"
-if [[ -z "$TICKET" ]]; then
-  echo -n "${bold}Linear ticket ID (e.g. DEV-1234): ${reset}"
-  read -r TICKET
-fi
-TICKET="${TICKET^^}"   # uppercase
-[[ "$TICKET" =~ ^[A-Z]+-[0-9]+$ ]] || die "Invalid ticket ID '$TICKET' (expected e.g. DEV-1234)"
+[[ -x "$SETUP_WORKTREE" ]] || die "setup-worktree not found/executable at $SETUP_WORKTREE"
 
-# ── fetch branch name from linear ────────────────────────────────────────────
-echo "${cyan}Looking up $TICKET in Linear…${reset}"
-
-QUERY=$(cat <<'GQL'
-query($id: String!) {
-  issue(id: $id) {
-    identifier
-    title
-    branchName
-  }
-}
-GQL
-)
-
-RESPONSE=$(curl -sf \
-  -H "Authorization: $LINEAR_API_KEY" \
-  -H "Content-Type: application/json" \
-  --data "$(printf '{"query":%s,"variables":{"id":%s}}' \
-    "$(echo "$QUERY" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read()))')" \
-    "$(echo "$TICKET" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read().strip()))')")" \
-  https://api.linear.app/graphql) || die "Linear API request failed"
-
-BRANCH=$(echo "$RESPONSE" | python3 -c "
-import sys, json
-d = json.load(sys.stdin)
-if 'errors' in d:
-    for e in d['errors']:
-        print('ERROR:', e.get('message',''), file=sys.stderr)
-    sys.exit(1)
-issue = d.get('data', {}).get('issue')
-if not issue:
-    print('ERROR: ticket not found', file=sys.stderr)
-    sys.exit(1)
-print(issue['branchName'])
-") || die "Could not get branch name for $TICKET"
-
-TITLE=$(echo "$RESPONSE" | python3 -c "
-import sys, json
-d = json.load(sys.stdin)
-print(d['data']['issue']['title'])
-")
-
-echo "  ${green}${bold}$TICKET${reset} $TITLE"
-echo "  branch: ${cyan}$BRANCH${reset}"
-echo ""
-
-# ── discover repos ───────────────────────────────────────────────────────────
-declare -a ALL_REPOS=()
-declare -a ALL_LABELS=()
-
-for base in "$CORE" "$UTILITY"; do
-  label=$(basename "$base")
-  for d in "$base"/*/; do
-    [[ -d "$d/.git" || -f "$d/.git" ]] || continue
-    repo=$(basename "$d")
-    ALL_REPOS+=("$d")
-    ALL_LABELS+=("[$label] $repo")
-  done
-done
-
-[[ ${#ALL_REPOS[@]} -eq 0 ]] && die "No repos found under $CORE or $UTILITY"
-
-# ── repo selection menu ───────────────────────────────────────────────────────
-echo "${bold}Select repos (space-separated numbers, or 'a' for all):${reset}"
-for i in "${!ALL_LABELS[@]}"; do
-  printf "  %2d) %s\n" "$((i+1))" "${ALL_LABELS[$i]}"
-done
-echo ""
-echo -n "Repos: "
-read -r SELECTION
-
-declare -a SELECTED_REPOS=()
-if [[ "$SELECTION" == "a" || "$SELECTION" == "all" ]]; then
-  SELECTED_REPOS=("${ALL_REPOS[@]}")
-else
-  for n in $SELECTION; do
-    [[ "$n" =~ ^[0-9]+$ ]] || die "Not a number: $n"
-    idx=$((n-1))
-    [[ $idx -ge 0 && $idx -lt ${#ALL_REPOS[@]} ]] || die "No repo #$n"
-    SELECTED_REPOS+=("${ALL_REPOS[$idx]}")
-  done
-fi
-
-[[ ${#SELECTED_REPOS[@]} -eq 0 ]] && die "No repos selected"
-
-# ── confirm ───────────────────────────────────────────────────────────────────
-TICKET_SLUG="${TICKET,,}"   # lowercase for directory name
-DEST="$PER_FEATURE/$TICKET_SLUG"
-
-echo ""
-echo "${bold}Will create worktrees:${reset}"
-for repo_path in "${SELECTED_REPOS[@]}"; do
-  repo=$(basename "$repo_path")
-  echo "  $DEST/$repo  (branch: $BRANCH)"
-done
-echo ""
-echo -n "Proceed? [Y/n] "
-read -r CONFIRM
-[[ -z "$CONFIRM" || "$CONFIRM" =~ ^[Yy] ]] || { echo "Aborted."; exit 0; }
-
-# ── create worktrees ─────────────────────────────────────────────────────────
-echo ""
-FAILURES=0
-for repo_path in "${SELECTED_REPOS[@]}"; do
-  repo=$(basename "$repo_path")
-  wt_path="$DEST/$repo"
-
-  printf "  %-30s " "$repo"
-
-  # Already exists?
-  if [[ -d "$wt_path" ]]; then
-    echo "${yellow}skipped — $wt_path already exists${reset}"
+# ── validate repos up front (fast fail before spawning anything) ─────────────
+for repo in "${REPOS[@]}"; do
+  if [[ -d "$repo/.git" || -f "$repo/.git" || -d "$CORE/$repo" || -d "$UTILITY/$repo" ]]; then
     continue
   fi
+  die "repo '$repo' not found under $CORE or $UTILITY (and not a git path)"
+done
 
-  # Fetch to see if branch exists on origin
-  git -C "$repo_path" fetch origin --quiet 2>/dev/null || true
+# ── aws preflight (once, for a clean early exit) ─────────────────────────────
+echo "${cyan}Checking AWS profile '$AWS_PROFILE_NAME'…${reset}"
+aws sts get-caller-identity --profile "$AWS_PROFILE_NAME" >/dev/null 2>&1 \
+  || die "not logged in to AWS profile '$AWS_PROFILE_NAME'. Run: ${bold}aws sso login --profile $AWS_PROFILE_NAME${reset}"
 
-  remote_exists=$(git -C "$repo_path" show-ref --verify --quiet "refs/remotes/origin/$BRANCH" && echo yes || echo no)
-  local_exists=$(git -C "$repo_path" show-ref --verify --quiet "refs/heads/$BRANCH" && echo yes || echo no)
+# ── set up ───────────────────────────────────────────────────────────────────
+DEST_ROOT="$PER_FEATURE/$SUBDIR"
+LOGDIR="$DEST_ROOT/.setup-logs"
+mkdir -p "$LOGDIR"
 
-  mkdir -p "$DEST"
+echo "${bold}Feature:${reset} $SUBDIR   ${bold}branch:${reset} ${cyan}$BRANCH${reset}"
+echo "${bold}Repos:${reset}   ${REPOS[*]}"
+echo "Worktrees → $DEST_ROOT"
+echo ""
 
-  if [[ "$remote_exists" == "yes" ]]; then
-    # Track existing remote branch
-    if git -C "$repo_path" worktree add --track -b "$BRANCH" "$wt_path" "origin/$BRANCH" 2>/dev/null; then
-      echo "${green}created (tracking origin)${reset}"
-    elif [[ "$local_exists" == "yes" ]]; then
-      # Branch already exists locally (worktree add -b fails if branch exists)
-      if git -C "$repo_path" worktree add "$wt_path" "$BRANCH" 2>/dev/null; then
-        echo "${green}created (existing local branch)${reset}"
-      else
-        echo "${red}FAILED${reset}"
-        ((FAILURES++)) || true
-      fi
-    else
-      echo "${red}FAILED${reset}"
-      ((FAILURES++)) || true
-    fi
-  elif [[ "$local_exists" == "yes" ]]; then
-    if git -C "$repo_path" worktree add "$wt_path" "$BRANCH" 2>/dev/null; then
-      echo "${green}created (existing local branch)${reset}"
-    else
-      echo "${red}FAILED${reset}"
-      ((FAILURES++)) || true
-    fi
+declare -a NAMES=() PIDS=() LOGS=()
+for repo in "${REPOS[@]}"; do
+  name="$(basename "$repo")"
+  log="$LOGDIR/$name.log"
+  echo "  ${cyan}starting${reset} $name (log: $log)"
+  "$SETUP_WORKTREE" "$repo" "$BRANCH" "$DEST_ROOT/$name" >"$log" 2>&1 &
+  NAMES+=("$name"); PIDS+=("$!"); LOGS+=("$log")
+done
+
+# ── wait & report ────────────────────────────────────────────────────────────
+echo ""
+echo "${bold}Results:${reset}"
+FAIL=0
+for i in "${!PIDS[@]}"; do
+  if wait "${PIDS[$i]}"; then
+    printf "  %-28s %s\n" "${NAMES[$i]}" "${green}OK${reset}"
   else
-    # New branch from main
-    if git -C "$repo_path" worktree add -b "$BRANCH" "$wt_path" "origin/main" 2>/dev/null; then
-      echo "${green}created (new branch from origin/main)${reset}"
-    else
-      echo "${red}FAILED${reset}"
-      ((FAILURES++)) || true
-    fi
+    printf "  %-28s %s  (see %s)\n" "${NAMES[$i]}" "${red}FAILED${reset}" "${LOGS[$i]}"
+    FAIL=1
   fi
 done
 
 echo ""
-if [[ $FAILURES -eq 0 ]]; then
-  echo "${green}${bold}Done.${reset} Worktrees at $DEST"
+if [[ $FAIL -eq 0 ]]; then
+  echo "${green}${bold}Done.${reset} Worktrees at $DEST_ROOT"
 else
-  echo "${yellow}${bold}Done with $FAILURES failure(s).${reset} Worktrees at $DEST"
+  echo "${yellow}${bold}Done with failures.${reset} Check the logs above."
   exit 1
 fi
