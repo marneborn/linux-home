@@ -1,31 +1,41 @@
 ---
 name: start-feature
-description: Set up git worktrees for a new feature across multiple repos. Asks for a Linear ticket ID, fetches the branch name from Linear, prompts for which repos are needed, then creates worktrees in ~/dev/glade/per-feature/$ticket-id/$repo.
+description: Set up git worktrees for a new feature across multiple Glade repos. Creates a per-feature dir under ~/dev/glade/per-feature and bootstraps one worktree per repo (branch + deps + dev env). Use when starting work that spans one or more repos. Wraps setup-worktree.
 ---
 
 # start-feature
 
-Run the shell script directly — it handles all interaction:
+Runs a script that does all the work — invoke it with the Bash tool:
 
 ```bash
-~/home-git/.claude/scripts/start-feature [TICKET-ID]
+~/home-git/.claude/scripts/start-feature <subdir> <branch> <repo> [repo ...]
 ```
 
-The script will:
-1. Resolve a `LINEAR_API_KEY` (env → `~/.config/glade/linear_token` → prompt to paste + save)
-2. Accept a ticket ID as argument or prompt for one (e.g. `DEV-1234`)
-3. Fetch `branchName` from Linear's GraphQL API
-4. Show a numbered menu of all repos in `~/dev/glade/core/` and `~/dev/glade/utility/`
-5. Accept space-separated numbers or `a` for all
-6. Create worktrees at `~/dev/glade/per-feature/$ticket-id/$repo` branched from `origin/main` (or tracking an existing remote branch)
+- **`<subdir>`** — directory name under `~/dev/glade/per-feature/` that holds this feature's worktrees (e.g. `dev-1234-case-filing`).
+- **`<branch>`** — branch name used for every worktree.
+- **`<repo...>`** — one or more repo names, resolved under `~/dev/glade/core/` then `~/dev/glade/utility/` (or explicit paths).
 
-## Running it via Claude
+## Gathering the inputs
 
-Use the Bash tool:
+Before calling the script, work out the three inputs:
 
-```bash
-~/home-git/.claude/scripts/start-feature "$TICKET"
-```
+- **Branch** — if the user gives a Linear ticket instead of a branch, resolve the ticket's `branchName` (via the Linear MCP or the user), then use that.
+- **Subdir** — the branch name typically looks like `<user>/DEV-NNNN-<slug>` (e.g. `ted/dev-35695-enable-with-aws-profile-in-all-repos`). Ask the user which form they want for the directory name:
+  - **ticket id** — just the ticket, e.g. `dev-35695`
+  - **slug** — the descriptive part, e.g. `enable-with-aws-profile-in-all-repos`
 
-Pass the ticket ID if already known; otherwise the script will prompt.
-The script is fully interactive, so invoke it with the Bash tool — it reads from stdin.
+  Strip the leading `<user>/` prefix either way. If there's no ticket in the branch, use the slug without asking.
+- **Repos** — ask which repos the feature touches. To list what's available:
+
+  ```bash
+  ls ~/dev/glade/core ~/dev/glade/utility
+  ```
+
+## What the script does
+
+1. Validates the repo names, then does one AWS preflight (`staging-admin`) so it fails fast if you're not logged in.
+2. `mkdir -p ~/dev/glade/per-feature/<subdir>`.
+3. Fans out one **`setup-worktree`** per repo **in parallel** (each targets a different source repo, so no contention), logging each to `<subdir>/.setup-logs/<repo>.log`.
+4. Prints a pass/fail summary; exits non-zero if any repo failed (its log path is shown).
+
+Each repo's worktree creation + dev-env bootstrap is handled by [setup-worktree](../setup-worktree/SKILL.md) — see that skill for the per-repo details.
