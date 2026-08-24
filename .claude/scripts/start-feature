@@ -15,7 +15,6 @@ SETUP_WORKTREE="$SCRIPT_DIR/setup-worktree"
 PER_FEATURE="$HOME/dev/glade/per-feature"
 CORE="$HOME/dev/glade/core"
 UTILITY="$HOME/dev/glade/utility"
-AWS_PROFILE_NAME="staging-admin"
 
 # ── colours ──────────────────────────────────────────────────────────────────
 bold=$(tput bold 2>/dev/null || echo "")
@@ -46,9 +45,17 @@ for repo in "${REPOS[@]}"; do
 done
 
 # ── aws preflight (once, for a clean early exit) ─────────────────────────────
-echo "${cyan}Checking AWS profile '$AWS_PROFILE_NAME'…${reset}"
-aws sts get-caller-identity --profile "$AWS_PROFILE_NAME" >/dev/null 2>&1 \
-  || die "not logged in to AWS profile '$AWS_PROFILE_NAME'. Run: ${bold}aws sso login --profile $AWS_PROFILE_NAME${reset}"
+# Ask a repo's own resolver instead of pinning a profile — see setup-worktree.
+# Any one repo answers for all of them, so probe the first that ships it.
+for repo in "${REPOS[@]}"; do
+  resolver="$repo/scripts/resolve-aws-profile.sh"
+  if [[ -x "$resolver" ]]; then
+    echo "${cyan}Resolving AWS profile…${reset}"
+    "$resolver" >/dev/null \
+      || die "no logged-in AWS profile. Run: ${bold}aws sso login --profile <profile>${reset}"
+    break
+  fi
+done
 
 # ── set up ───────────────────────────────────────────────────────────────────
 DEST_ROOT="$PER_FEATURE/$SUBDIR"

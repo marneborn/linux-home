@@ -33,7 +33,7 @@ Before calling the script, work out the three inputs:
 
 ## What the script does
 
-1. Validates the repo names, then does one AWS preflight (`staging-admin`) so it fails fast if you're not logged in.
+1. Validates the repo names, then does one AWS preflight — the first repo's own `scripts/resolve-aws-profile.sh` — so it fails fast if no profile is logged in.
 2. `mkdir -p ~/dev/glade/per-feature/<subdir>`.
 3. Fans out one **`setup-worktree`** per repo **in parallel** (each targets a different source repo, so no contention), logging each to `<subdir>/.setup-logs/<repo>.log`.
 4. Prints a pass/fail summary; exits non-zero if any repo failed (its log path is shown).

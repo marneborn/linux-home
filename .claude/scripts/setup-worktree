@@ -12,7 +12,6 @@ set -euo pipefail
 
 CORE="$HOME/dev/glade/core"
 UTILITY="$HOME/dev/glade/utility"
-AWS_PROFILE_NAME="staging-admin"
 
 # ── colours ──────────────────────────────────────────────────────────────────
 bold=$(tput bold 2>/dev/null || echo "")
@@ -30,15 +29,6 @@ BRANCH="${2:-}"
 DEST_ARG="${3:-}"
 [[ -z "$REPO_ARG" || -z "$BRANCH" ]] && die "usage: setup-worktree <repo> <branch> [dest]"
 
-# ── aws preflight ────────────────────────────────────────────────────────────
-# setupDevEnvironment.sh needs valid AWS creds; bail early with a clear hint.
-echo "${cyan}Checking AWS profile '$AWS_PROFILE_NAME'…${reset}"
-if ! aws sts get-caller-identity --profile "$AWS_PROFILE_NAME" >/dev/null 2>&1; then
-  die "not logged in to AWS profile '$AWS_PROFILE_NAME'. Run: ${bold}aws sso login --profile $AWS_PROFILE_NAME${reset}"
-fi
-# setupDevEnvironment.sh runs with this profile.
-export AWS_PROFILE="$AWS_PROFILE_NAME"
-
 # ── resolve repo path ────────────────────────────────────────────────────────
 if [[ -d "$REPO_ARG/.git" || -f "$REPO_ARG/.git" ]]; then
   REPO_PATH="$REPO_ARG"
@@ -51,6 +41,20 @@ else
 fi
 REPO_PATH="${REPO_PATH%/}"
 REPO_NAME="$(basename "$REPO_PATH")"
+
+# ── aws preflight ────────────────────────────────────────────────────────────
+# The bootstrap needs AWS creds, but *which* profile is the repo's own business:
+# scripts/resolve-aws-profile.sh walks a candidate list and returns the first
+# logged-in profile (least-privileged, lowest environment first), and
+# noodle-api's createDotEnv.ts pins a per-environment profile on top of that.
+# Both honor an inherited AWS_PROFILE verbatim, so we must NOT export one here —
+# pinning staging-admin (as this script used to) overrode their choice and aimed
+# a development secret read at the staging account. Probe only, to fail fast.
+RESOLVER="$REPO_PATH/scripts/resolve-aws-profile.sh"
+if [[ -x "$RESOLVER" ]]; then
+  echo "${cyan}Resolving AWS profile…${reset}"
+  "$RESOLVER" >/dev/null || die "no logged-in AWS profile — see the hint above"
+fi
 
 # ── resolve dest ─────────────────────────────────────────────────────────────
 DEST="${DEST_ARG:-$PWD/$REPO_NAME}"
@@ -94,7 +98,8 @@ if [[ -f "$DEST/.envrc" ]]; then
 fi
 
 # ── run the repo's dev-env bootstrap (via direnv exec → correct node) ─────────
-# AWS_PROFILE is already exported above. A few repos need special handling.
+# AWS_PROFILE is deliberately left unset — the repo's scripts resolve it. A few
+# repos need special handling.
 cd "$DEST"
 SETUP="scripts/setupDevEnvironment.sh"
 

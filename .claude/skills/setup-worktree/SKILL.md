@@ -17,7 +17,7 @@ Runs a script that does all the work — invoke it with the Bash tool:
 
 ## What the script does
 
-1. **AWS preflight** — `aws sts get-caller-identity --profile staging-admin`; exits early with an `aws sso login` hint if not logged in. On success, exports `AWS_PROFILE=staging-admin` for the bootstrap step (the repo's dev-env setup needs valid creds).
+1. **AWS preflight** — runs the repo's own `scripts/resolve-aws-profile.sh` (skipped for repos that don't ship it), so it still exits early with an `aws sso login` hint when nothing is logged in. It deliberately does **not** export `AWS_PROFILE`: the repo's `with-aws-profile.sh` and `createDotEnv.ts` pick the right profile themselves — per environment, least-privileged first — and both honor an inherited `AWS_PROFILE` verbatim, so pinning one here would override them.
 2. **Skip if `dest` exists** — idempotent, exits 0.
 3. **`git worktree add`** — fetches `origin` first, then tracks `origin/<branch>` if it exists, checks out an existing local branch, or creates a new branch from `origin/main`.
 4. **`direnv allow`** on the new worktree.
