@@ -40,6 +40,7 @@ export AWS_PAGER=
 
 export M2_HOME="$HOME/bin/apache-maven-3.9.5"
 
+export GLADE_ROOT=~/dev/glade/core
 export NODE_ENV=development
 export ANDROID_HOME=/Users/mikael/Library/Android/sdk
 
