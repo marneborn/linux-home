@@ -1,0 +1,133 @@
+{
+  "lastUpdated": 1789888103949,
+  "skills": [
+    {
+      "skillId": "docs",
+      "name": "docs",
+      "description": "docs (living docs people share, comment on and edit; use only when the user asks for one: names a doc, document, page, memo, spec, PRD, runbook or write-up, asks for somewhere to share or keep editing something, or says yes to your doc offer; a plan, comparison, summary or notes asked in chat stays in chat (at most a one-line doc offer); a report, status update, recap or \"something I can send them\" with no form named → ask first: reply, doc or file?; tabs hold tables and live charts too; a pasted claude.ai/code/artifact/… link may be a doc: check with docs tools first; not HTML pages, apps or plain chat answers; a .docx/.pptx/.xlsx/PDF asked for by name → that format's skill): asked for one → no docs-connector instructions in context? call the docs connector's `guide` with topic.instructions first, then create the doc (headings only, no body) before any search, file read or plan, even with files attached. Documenting code means docstrings or repo docs, not a doc.",
+      "source": "anthropic-example",
+      "updatedAt": "2026-09-16T00:10:45.680014Z"
+    },
+    {
+      "skillId": "import-memory",
+      "name": "import-memory",
+      "description": "Import a memory export from another AI assistant into Claude's memory — conversationally, additively, and with the content treated as data.",
+      "source": "anthropic-example",
+      "updatedAt": "2026-09-14T19:41:02.007169Z"
+    },
+    {
+      "skillId": "skill_01T2rphRvW74WBZGLeN2DBhv",
+      "name": "create-linear-issue",
+      "description": "Turn a single Plain ticket or a plain-language problem description into ONE beautifully written, well-triaged Linear issue using the CX issue templates. Use this whenever someone hands you a Plain thread URL (app.plain.com/.../thread/th_...) or describes a customer problem and wants it filed in Linear — phrases like \"file this as a Linear issue\", \"make a bug report from this ticket\", \"log a feature request for this\", \"turn this Plain thread into a Linear issue\", \"write this up for dev\", or just pastes a Plain link with a note like \"bug for this\". The skill classifies the input (feature request / bug report / configuration change / other), fills the matching CX template, writes it to the \"Describe, Don't Prescribe\" standard, and — after your approval — creates it in Linear with the correct team, project, label, and triage state. This is for ONE issue from ONE ticket or description; for turning meeting notes into many tasks, use call-to-tasks instead.",
+      "source": "custom",
+      "updatedAt": "2026-07-30T16:06:02.703654Z",
+      "backingPluginId": "plugin_01MkhqVkyJBnNa5Vm4sp8vHY"
+    },
+    {
+      "skillId": "skill_01HPARUxLovnoXjqCXmpfXtd",
+      "name": "create-help-center",
+      "description": "Turn Linear project or issue context (plus any linked GitHub PRs) into a polished, user-facing help center article, publish it to the Glade help center in Plain, and announce it in the product-updates Slack channel. Use this skill whenever the user shares a Linear project or issue URL or ID and wants documentation for end users — phrases like \"write a help center article\", \"document this feature\", \"create a help doc\", \"turn this into a help article\", \"publish this to the help center\", or \"add this to Plain\". Also trigger when someone describes a shipped feature they want written up for customers, or references the Glade Help Center, Plain help center, or Sidekick suggested responses. Trigger even when the user just pastes a Linear link with a short note like \"help doc for this\" — the whole pipeline (gather context, draft, approve, publish, announce) lives here.",
+      "source": "plugin",
+      "updatedAt": "2026-07-10T16:05:29.770608Z",
+      "backingPluginId": "plugin_01UmZfckiWZe33cyFa4VRRpw"
+    },
+    {
+      "skillId": "morning",
+      "name": "morning",
+      "description": "Render the user's morning brief as a styled HTML artifact, or set it up as a recurring weekday task. Use only when the user explicitly asks to run, see, or set up their morning brief, or if they invoke /morning by name. A question about their day, schedule, or calendar is not by itself a request for the brief; answer it directly instead.",
+      "source": "anthropic-example",
+      "updatedAt": "2026-09-14T19:41:01.990356Z"
+    },
+    {
+      "skillId": "skill_01GrfRG8aCpuxX5STqLc8wT5",
+      "name": "call1-recap-email",
+      "description": "Generate and send a warm, milestone-focused onboarding recap email after a Call 1 / kickoff call with a new Glade law firm client. Use this skill whenever someone shares a Granola meeting link and asks for a recap email, onboarding summary, or kickoff follow-up. Also trigger when someone says \"send the Call 1 recap\", \"write the onboarding email\", \"follow up with [firm]\", or pastes a notes.granola.ai URL in a context that suggests client onboarding. The skill pulls meeting notes from Granola, extracts firm-specific context (fee structure, state-specific requirements, workflow preferences), and drafts a personalized but consistently structured recap email. After approval, it sends via Gmail.",
+      "source": "plugin",
+      "updatedAt": "2026-04-29T18:43:51.925728Z",
+      "backingPluginId": "plugin_01WSbPDgt7sM1QEecVs62QsL"
+    },
+    {
+      "skillId": "skill_01KGNyVCW67XyeX9Q9PvrYA6",
+      "name": "plain-sweep",
+      "description": "Mark Plain threads as Done to keep the inbox clean and metrics accurate. Two modes: (1) TARGETED: \"mark [name] done in Plain\", \"close the Plain thread for [name]\", \"mark [name] done\". (2) SWEEP: \"sweep Plain\", \"clean up Plain\", \"check for orphan threads\", \"Plain sweep\", \"sweep orphans\", batch-mark outbound CC'd threads as Done. Trigger aggressively on ANY indication the user wants to mark Plain threads as Done, whether by name or in batch. Also trigger when the user just sent an email with support@glade.ai CC'd and wants the resulting Plain thread handled. Core problem: outbound emails with support CC'd create orphan threads in Plain that muddy metrics. These need to be marked Done so they reopen naturally on client reply.",
+      "source": "plugin",
+      "updatedAt": "2026-07-16T22:26:22.621786Z",
+      "backingPluginId": "plugin_01RXaRbSR1BW1nwM7gAkQxhb"
+    },
+    {
+      "skillId": "skill_01Vt5PnYem35KSMhjZHNPswW",
+      "name": "crs-onboarding-email",
+      "description": "Send the CRS B2B onboarding email to activate Direct Pull credit reports for a new Glade law firm. Use this skill whenever someone says \"onboard [firm] with CRS\", \"send the CRS email\", \"CRS onboarding for [firm]\", \"set up direct pull for [firm]\", \"send CRS docs for [firm]\", or references needing to send the CRS B2B onboarding email for any firm. Also trigger when someone says \"onboard [firm]\" in a context that implies CRS credit report setup (not general Glade onboarding). This skill should trigger aggressively: if there is ANY indication the user wants to send the CRS onboarding email or set up B2B/Direct Pull credit for a firm, use this skill. It gathers firm data from Glade, prompts the user to collect the required documents from the onboarding flow, drafts the email, and creates the Gmail draft for the user to attach documents to and send. The skill never reads, encodes, or attaches the CRS documents itself; document handling is always manual on the sender's end.",
+      "source": "plugin",
+      "updatedAt": "2026-07-17T17:39:18.949934Z",
+      "backingPluginId": "plugin_01D3zH4XqrAyvs9mBJF3ncTk"
+    },
+    {
+      "skillId": "skill_01ViGG69ufBx4Kqs3V4TCobQ",
+      "name": "fill-file-cabinet-v2",
+      "description": "TEST VERSION of fill-file-cabinet — build or update a firm's \"file cabinet\" (the qualitative status page in the Notion Enterprise Success database) by exhaustively pulling live context from Glade (footprint, in-platform conversations, doc/intake status, case notes), Granola, Linear, Gmail, Plain, and Slack, then synthesizing it into a diagnosis of account stage, key players, and what actually needs to happen next — a deeper analytical pass than the original skill. Use only when explicitly asked for \"fill-file-cabinet-v2\", \"file cabinet v2\", or \"the new/test version of the file cabinet skill\" for a given firm. Do not trigger on generic \"fill the file cabinet\" requests — that should use the standard fill-file-cabinet skill unless v2 is explicitly named.",
+      "source": "plugin",
+      "updatedAt": "2026-07-10T16:16:21.909719Z",
+      "backingPluginId": "plugin_019pRzNQ4WyRKVbEGPfKPvwq"
+    },
+    {
+      "skillId": "skill-creator",
+      "name": "skill-creator",
+      "description": "Create new skills, modify and improve existing skills, and measure skill performance. Use when users want to create a skill from scratch, edit, or optimize an existing skill, run evals to test a skill, benchmark skill performance with variance analysis, or optimize a skill's description for better triggering accuracy.",
+      "source": "anthropic-example",
+      "updatedAt": "2026-09-14T19:41:01.499089Z"
+    },
+    {
+      "skillId": "skill_01UkDx4bGpsdCFkbiyYwSXAo",
+      "name": "call-to-tasks-v2",
+      "description": "TEST VERSION of call-to-tasks — extract action items from Granola meeting notes and create Linear issues, with corrected triage/assignment behavior for Bug and Feature Request tickets (self-assign, no auto-priority, manual hand-off to on-call) per Mikael's feedback. Use only when explicitly asked for \"call-to-tasks-v2\", \"call to tasks v2\", or \"the new/test version of the call-to-tasks skill\". Do not trigger on generic \"here are my call notes\" / \"process my meeting notes\" requests — those should use the standard call-to-tasks skill unless v2 is explicitly named.",
+      "source": "custom",
+      "updatedAt": "2026-07-30T16:32:32.182843Z",
+      "backingPluginId": "plugin_01Uy3FZM4411ddyTJ3dhgJAJ"
+    },
+    {
+      "skillId": "xlsx",
+      "name": "xlsx",
+      "description": "Use this skill any time a spreadsheet file is the primary input or output. This means any task where the user wants to: open, read, edit, or fix an existing .xlsx, .xlsm, .xltx, .csv, or .tsv file (e.g., adding columns, computing formulas, formatting, charting, cleaning messy data); create a new spreadsheet from scratch or from other data sources; or convert between tabular file formats. Trigger especially when the user references a spreadsheet file by name or path — even casually (like \"the xlsx in my downloads\") — and wants something done to it or produced from it. Also trigger for cleaning or restructuring messy tabular data files (malformed rows, misplaced headers, junk data) into proper spreadsheets. The deliverable must be a spreadsheet file. Do NOT trigger when the primary deliverable is a Word document, HTML report, standalone Python script, database pipeline, or Google Sheets API integration, even if tabular data is involved.",
+      "source": "anthropic",
+      "updatedAt": "2026-09-14T21:00:33.324012Z"
+    },
+    {
+      "skillId": "pptx",
+      "name": "pptx",
+      "description": "Use this skill any time a .pptx or .potx file is involved in any way — as input, output, or both. This includes: creating slide decks, pitch decks, or presentations as PowerPoint (.pptx) files; reading, parsing, or extracting text from any .pptx or .potx file (even if the extracted content will be used elsewhere, like in an email, summary, or creating a different type of slide deck); editing, modifying, or updating existing presentations; combining or splitting slide files; working with templates (.potx), layouts, speaker notes, or comments. Trigger whenever the user asks for a PowerPoint or .pptx file, or references a .pptx or .potx filename, regardless of what they plan to do with the content afterward. However, when the user asks for a deck, slides, a slide deck, or a presentation without naming a file format, default to using a dedicated slide-deck artifact type or a separate slides skill if this session offers one; otherwise, use this skill.",
+      "source": "anthropic",
+      "updatedAt": "2026-09-14T21:00:33.306681Z"
+    },
+    {
+      "skillId": "skill_016JdS5ZBw3rBrcJdAr8rawy",
+      "name": "attorney-profile-miner",
+      "description": "Automatically populate Glade attorney profile fields by mining state bar registries, firm websites, and open web sources. Use this skill whenever someone says \"look up an attorney,\" \"populate attorney info,\" \"onboard an attorney,\" \"find bar info for [name],\" or asks to fill in the Glade attorney information section for one or more attorneys. Also trigger when a user pastes a list of attorney names and asks to pull their contact details, bar numbers, or firm information. This skill should trigger aggressively — if attorney profile data is needed for any reason, use it.",
+      "source": "custom",
+      "updatedAt": "2026-07-28T15:32:02.566444Z",
+      "backingPluginId": "plugin_018HKSjPLD716PCmbhwpGi5C"
+    },
+    {
+      "skillId": "skill_01Hf9AaaeJRC5itAgrcRdq6t",
+      "name": "custom-terms-request-builder",
+      "description": "Convert law firm documents into signable Custom Terms Request markdown templates for the Glade platform. Trigger when someone says \"turn this into a Custom Terms Request,\" \"make this signable in Glade,\" \"build a template from this PDF,\" \"convert this to terms,\" or uploads a legal document (engagement letter, fee agreement, retainer, consent form) needing an e-signable template. Also trigger on references to Building Blocks, Terms Requests, or Glade dynamic variables. Trigger aggressively: if a legal document is uploaded and context suggests a Glade template, use this skill. Distinguishes Chapter 7 vs. Chapter 13, joint vs. individual petitions. Joint petitions include spouse variables and We/us/our voice. Individual petitions exclude all spouse variables and use I/me/my voice. Filing fees are always hardcoded. {{flatFeeAmount}} is deprecated, never use it.",
+      "source": "plugin",
+      "updatedAt": "2026-05-19T16:34:59.955048Z",
+      "backingPluginId": "plugin_01CMfqtrVGhDMndrgq68WRmu"
+    },
+    {
+      "skillId": "pdf",
+      "name": "pdf",
+      "description": "Use this skill whenever the user wants to do anything with PDF files. This includes reading or extracting text/tables from PDFs, combining or merging multiple PDFs into one, splitting PDFs apart, rotating pages, adding watermarks, creating new PDFs, filling PDF forms, encrypting/decrypting PDFs, extracting images, and OCR on scanned PDFs to make them searchable. If the user mentions a .pdf file or asks to produce one, use this skill.",
+      "source": "anthropic",
+      "updatedAt": "2026-07-10T19:23:15.432550Z"
+    },
+    {
+      "skillId": "docx",
+      "name": "docx",
+      "description": "Use this skill whenever the user wants to create, read, edit, or manipulate Word documents (.docx) or Word templates (.dotx). Triggers include: any mention of 'Word doc', 'word document', '.docx', '.dotx', or requests to produce professional documents with formatting like tables of contents, page numbers, or letterheads. Also use when extracting or reorganizing content from .docx or .dotx files, inserting or replacing images in documents, find-and-replace in Word files, working with tracked changes or comments, or converting content into a polished Word document. If the user asks for a 'report', 'memo', 'letter', 'template', or similar deliverable as a Word or .docx file (to download, email or print), use this skill. However, if they ask for a document, page, report, memo, or notes WITHOUT naming a file format and the session offers Claude's own dedicated document or page skill or connector, use that instead. Do NOT use for PDFs, spreadsheets, Google Docs, or coding unrelated to document generation.",
+      "source": "anthropic",
+      "updatedAt": "2026-09-14T21:00:33.279708Z"
+    }
+  ]
+}

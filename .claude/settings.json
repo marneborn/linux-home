@@ -25,7 +25,7 @@
       "Bash(yarn pg:test:migration:run)",
       "Bash(yarn tsx:*)"
     ],
-    "defaultMode": "acceptEdits",
+    "defaultMode": "auto",
     "additionalDirectories": [
       "~/dev/glade"
     ]
@@ -42,5 +42,41 @@
     }
   },
   "remoteControlAtStartup": false,
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "autoMode": {
+    "allow": [
+      "$defaults",
+      "Bash(psql:*) in webforms local/dev DB context — routine read/write to local dev Postgres per README dev setup"
+    ],
+    "soft_deny": [
+      "$defaults",
+      "Bash(psql:*) against any host or connection string containing `prod`/`production` (e.g. noodle-postgresql14-prod-lb) — force explicit confirmation before prod DB access from this repo"
+    ],
+    "environment": [
+      "### Org-wide",
+      "**Organization**: glade-ai (GitHub org; repo `glade-ai/webforms`)",
+      "**Cloud provider(s)**: AWS (aws secretsmanager markers, AWS CLI v2 referenced in README, CI secrets for AWS accounts)",
+      "**Repository visibility**: private (confirmed via gh: glade-ai/webforms is private)",
+      "**Internal sharing / snippet hosting**: Notion (notion.so referenced in README for setup docs)",
+      "**Secrets management**: AWS Secrets Manager (config downloaded via `yarn build:devdotenv`); CI secrets include AWS_ACCESS_KEY_ID, AWS_ACCESS_KEY_SECRET, NPM_TOKEN, SENTRY_AUTH_TOKEN, SLACK_BOT_TOKEN",
+      "**Default / protected branches**: `main` is the default branch; ruleset active on `main`; branch protection listed for `main` (via gh)",
+      "**CI/CD deploy targets**: AWS ECS (via .github/workflows and AWS_ACCOUNT_OPERATIONS/AWS_ACCOUNT_PRODUCTION/AWS_ACCOUNT_STAGING CI secrets, AWS_ECR_REPO_NAME)",
+      "**Network posture**: None configured",
+      "**Source control**: GitHub, repo glade-ai/webforms and its origin remote (github.com:glade-ai/webforms.git) only",
+      "**Trusted internal domains**: None configured",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: None configured",
+      "**Internal package registry**: None configured (NPM_TOKEN present in CI secrets but no registry host confirmed)",
+      "**Sensitive data locations & audiences**: .env.development/.env.staging/.env.production/.env.legacy/.env.qa/.env.noodleservers and timestamped .env.development.* snapshots; credentials.json, token.json; scripts/postgres/seed-from-latest-prod-snapshot.sh (likely contains production data snapshots) — share only with engineers cleared for production customer data",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any host/namespace/container with `prod`/`production` as a whole word or segment — includes the `noodle-shop`/legacy AWS account (779541388696) and the new production AWS account (470870055209) referenced in skill docs, and RDS hosts like `noodle-postgresql14-prod-lb`",
+      "**Protected deployment namespaces / environments**: staging and production ECS environments for questionnaires-backend (webforms), per AWS_ACCOUNT_STAGING / AWS_ACCOUNT_PRODUCTION CI secrets",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything named/tagged with `prod` or `production` as a whole word or segment",
+      "### User-specific",
+      "**Primary use of Claude Code**: software development (backend microservice work on questionnaires-backend / webforms)",
+      "**Trusted repo**: /Users/mikael/dev/glade/core/webforms (glade-ai/webforms, private) and its origin remote — confidential material (non-secret) is fine to commit here; secrets and sensitive personal/customer data are never cleared into it by visibility alone",
+      "**Org-specific CLIs**: None configured",
+      "routine under repo root of webforms/ prefix qualifiers: local dev workflows (yarn dev*, yarn build*, yarn pg:*, docker-based local postgres) are routine here"
+    ]
+  }
 }
